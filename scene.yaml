@@ -15,7 +15,7 @@ styles:
             blocks:
                 global: |
                     float PI = 3.14159265359;
-                    float deg2rad(in float deg) { return deg * PI / 180.; }
+                    float deg2rad(float deg) { return deg * PI / 180.; }
                     float rad2deg(float rad) { return rad * 180. / PI; }
 
                     // convert from mercator x,y to lat/long
@@ -47,7 +47,8 @@ styles:
                         return vec2(x,y);
                     }
                 color: |
-                    color.rgb *= vec3(min((v_world_position.z*.001 + .5),1.));
+                    //color.g = y2lat(v_world_position.y);
+                    //color.r = x2lon(v_world_position.x);
                 position: |
 
 
@@ -56,13 +57,23 @@ styles:
                     float lat = y2lat(v_world_position.y);
 
                     // then convert from lat/lng to albers
-                    position.xy = vec2(mix(position.xy, albers(lat, lon)*vec2(1000000.), .9));
+                    position.xy = vec2(mix(position.xy, albers(lat, lon)*vec2(500000.), .95));
 
+    alberslines:
+        base: lines
+        mix: albers
 sources:
     osm:
         type: TopoJSONTiles
         url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson
 layers:
+    boundaries:
+        data: { source: osm }
+        draw:
+            alberslines:
+                order: 10
+                color: white
+                width: 2px
     water:
         data: { source: osm }
         draw:
