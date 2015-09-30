@@ -22,14 +22,14 @@ styles:
                 rad2deg(d): (d)*180.0/PI
             blocks:
                 global: |
-                    //    http://wiki.openstreetmap.org/wiki/Mercator
+                    // http://wiki.openstreetmap.org/wiki/Mercator
                     float y2lat_m (float y) { return rad2deg(2.0*atan(exp((y/EARTH_RADIUS)))-HALF_PI); }
                     float x2lon_m (float x) { return rad2deg(x/EARTH_RADIUS); }
 
                     float lat2y_m (float lat) { return EARTH_RADIUS*log(tan(QUARTER_PI+ deg2rad(lat)/2.0)); }
                     float lon2x_m (float lon) { return deg2rad(lon)*EARTH_RADIUS; }
                     
-                    // convert from lat/long to albers
+                    // convert from lat/long to albers -- from https://gist.github.com/RandomEtc/476238
                     vec2 albers(float lat, float lng, float lat0, float lng0, float phi1, float phi2) {
                         float n = 0.5 * (sin(phi1) + sin(phi2));
                         float c = cos(phi1);
@@ -44,7 +44,8 @@ styles:
                         return vec2(x,y);
                     }
                 position: |
-                    // mercator position of the current vertex, u_map_position = center of screen, position.xy = vertex screen position in meters from the center of the screen
+                    // mercator position of the current vertex, u_map_position = center of screen,
+                    // position.xy = vertex screen position in meters from the center of the screen
                     vec2 mercator = u_map_position.xy + position.xy;
                     float lat = y2lat_m(mercator.y);
                     float lon = x2lon_m(mercator.x);
