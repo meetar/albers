@@ -6,7 +6,5 @@ Usually, an Albers map is specified with a particular center, and one or two "st
 
 Live demo: http://meetar.github.io/albers/
 
-More about the Albers projection: 
-
 ![usa](https://cloud.githubusercontent.com/assets/459970/10209464/83f25b72-67a9-11e5-95d6-ba116b966d04.jpg)
 
