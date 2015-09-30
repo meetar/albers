@@ -11,29 +11,26 @@ lights:
 styles:
     albers:
         base: polygons
+        animated: true
         shaders:
+            defines:
+                EARTH_RADIUS: 6378137.0
+                PI: 3.14159265358979323846
+                HALF_PI: 1.570796327
+                QUARTER_PI: .785398163
+                deg2rad(d): (d)*PI/180.0
+                rad2deg(d): (d)*180.0/PI
             blocks:
                 global: |
-                    float PI = 3.14159265359;
-                    float deg2rad(float deg) { return deg * PI / 180.; }
-                    float rad2deg(float rad) { return rad * 180. / PI; }
+                    //    http://wiki.openstreetmap.org/wiki/Mercator
+                    float y2lat_m (float y) { return rad2deg(2.0*atan(exp((y/EARTH_RADIUS)))-HALF_PI); }
+                    float x2lon_m (float x) { return rad2deg(x/EARTH_RADIUS); }
 
-                    // convert from mercator x,y to lat/long
-                    float y2lat(float y) { return 180./PI * (2. * atan(exp(y*PI/180.)) - PI/2.); }
-                    float lat2y(float lat) { return 180./PI * log(tan(PI/4.+lat*(PI/180.)/2.)); }
-
-                    float x2lon(float x) { return rad2deg(x / 6378137.0); }
-                    float lon2x(float lon) { return deg2rad(lon) * 6378137.0; }
+                    float lat2y_m (float lat) { return EARTH_RADIUS*log(tan(QUARTER_PI+ deg2rad(lat)/2.0)); }
+                    float lon2x_m (float lon) { return deg2rad(lon)*EARTH_RADIUS; }
                     
                     // convert from lat/long to albers
-                    vec2 albers(float lat, float lng) {
-
-                        float lat0 = 66. * (PI/180.);   // Latitude_Of_Origin
-                        float lng0 = 105. * (PI/180.);  // Central_Meridian
-                        float phi1 = 52. * (PI/180.);   // Standard_Parallel_1
-                        float phi2 = 64. * (PI/180.);  // Standard_Parallel_2
-
-
+                    vec2 albers(float lat, float lng, float lat0, float lng0, float phi1, float phi2) {
                         float n = 0.5 * (sin(phi1) + sin(phi2));
                         float c = cos(phi1);
                         float C = c*c + 2.*n*sin(phi1);
@@ -46,18 +43,23 @@ styles:
 
                         return vec2(x,y);
                     }
-                color: |
-                    //color.g = y2lat(v_world_position.y);
-                    //color.r = x2lon(v_world_position.x);
                 position: |
+                    // mercator position of the current vertex, u_map_position = center of screen, position.xy = vertex screen position in meters from the center of the screen
+                    vec2 mercator = u_map_position.xy + position.xy;
+                    float lat = y2lat_m(mercator.y);
+                    float lon = x2lon_m(mercator.x);
 
+                    // Latitude_Of_Origin
+                    float centerlat = deg2rad(y2lat_m(u_map_position.y));
+                    // Central_Meridian
+                    float centerlon = deg2rad(x2lon_m(u_map_position.x));
 
-                    // get lat/long from vertex position
-                    float lon = x2lon(v_world_position.x);
-                    float lat = y2lat(v_world_position.y);
+                    // Standard_Parallel_1
+                    float phi1 = deg2rad(y2lat_m(u_map_position.y) + 10.);
+                    // Standard_Parallel_2
+                    float phi2 = deg2rad(y2lat_m(u_map_position.y) - 10.);
 
-                    // then convert from lat/lng to albers
-                    position.xy = vec2(mix(position.xy, albers(lat, lon)*vec2(500000.), .95));
+                    position.xy = albers(lat, lon, centerlat, centerlon, phi1, phi2)*EARTH_RADIUS;
 
     alberslines:
         base: lines
