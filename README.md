@@ -1,10 +1,12 @@
 # albers
 
-This map applies dynamic [Albers equal-area conic projection](https://en.wikipedia.org/wiki/Albers_projection) to the Mapzen vector tiles, using the Tangram JavaScript mapping library.
+This map applies a dynamic [Albers equal-area conic projection](https://en.wikipedia.org/wiki/Albers_projection) to the Mapzen vector tiles, using the Tangram JavaScript mapping library.
 
-Usually, an Albers map is specified with a particular center, and one or two "standard parallels", which are lines of latitude which have no shape distortion – this map adjusts all of these parameters with the movement of the map, using a vertex shader inside the scene.yaml file.
+The Mapzen tiles are first converted from [Web Mercator](https://en.wikipedia.org/wiki/Web_Mercator) to spherical lat/lng coordinates, and then reprojected into Albers.
 
-I've left the tile borders visible so the distortion is more obvious here.
+Usually, a [conic projection](https://en.wikipedia.org/wiki/Map_projection#Conic) is specified with a specific center and two "standard parallels", which are lines of latitude with no distortion – this map adjusts all of these parameters in real time with the movement of the map, using a vertex shader inside the scene.yaml file.
+
+I've left the edges of the loaded tiles visible so the map's behavior is more obvious.
 
 Live demo: http://meetar.github.io/albers/
 
