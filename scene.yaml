@@ -56,8 +56,7 @@ styles:
                     float lat = y2lat(v_world_position.y);
 
                     // then convert from lat/lng to albers
-                    position.xy = vec2(mix(position.xy, albers(lat, lon)*vec2(1000000.), .5));
-
+                    position.xy = vec2(mix(position.xy, albers(lat, lon)*vec2(1000000.), .9));
 
 sources:
     osm:
@@ -101,21 +100,3 @@ layers:
                 polygons:
                     style: buildings
                     extrude: function () { return feature.height > 0 || $zoom >= 16; }
-    road_labels:
-        data: { source: osm, layer: roads }
-        filter: { name: true, aeroway: false, tunnel: false, railway: false, not: { kind: rail } }
-
-        highway:
-            filter: { kind: highway, $zoom: { min: 7 } }
-            draw:
-                text:
-                    font:
-                        fill: white
-                        typeface: 500 12px Helvetica
-        not_highway:
-            filter: { not: { kind: highway }, $zoom: { min: 13 } }
-            draw:
-                text:
-                    font:
-                        fill: white
-                        typeface: 100 11px Helvetica
