@@ -1,0 +1,121 @@
+cameras:
+    perspective:
+        type: perspective
+        vanishing_point: [0, -500]
+lights:
+    directional1:
+        type: directional
+        direction: [.1, .5, -1]
+        diffuse: .7
+        ambient: .5
+styles:
+    albers:
+        base: polygons
+        shaders:
+            blocks:
+                global: |
+                    float PI = 3.14159265359;
+                    float deg2rad(in float deg) { return deg * PI / 180.; }
+                    float rad2deg(float rad) { return rad * 180. / PI; }
+
+                    // convert from mercator x,y to lat/long
+                    float y2lat(float y) { return 180./PI * (2. * atan(exp(y*PI/180.)) - PI/2.); }
+                    float lat2y(float lat) { return 180./PI * log(tan(PI/4.+lat*(PI/180.)/2.)); }
+
+                    float x2lon(float x) { return rad2deg(x / 6378137.0); }
+                    float lon2x(float lon) { return deg2rad(lon) * 6378137.0; }
+                    
+                    // convert from lat/long to albers
+                    vec2 albers(float lat, float lng) {
+
+                        float lat0 = 66. * (PI/180.);   // Latitude_Of_Origin
+                        float lng0 = 105. * (PI/180.);  // Central_Meridian
+                        float phi1 = 52. * (PI/180.);   // Standard_Parallel_1
+                        float phi2 = 64. * (PI/180.);  // Standard_Parallel_2
+
+
+                        float n = 0.5 * (sin(phi1) + sin(phi2));
+                        float c = cos(phi1);
+                        float C = c*c + 2.*n*sin(phi1);
+                        float p0 = sqrt(C - 2.*n*sin(lat0)) / n;
+                        float theta = n * (lng * PI/180. - lng0);
+                        float p = sqrt(C - 2.*n*sin(lat* PI/180.)) / n;
+
+                        float x = p * sin(theta);
+                        float y = p0 - p * cos(theta);
+
+                        return vec2(x,y);
+                    }
+                color: |
+                    color.rgb *= vec3(min((v_world_position.z*.001 + .5),1.));
+                position: |
+
+
+                    // get lat/long from vertex position
+                    float lon = x2lon(v_world_position.x);
+                    float lat = y2lat(v_world_position.y);
+
+                    // then convert from lat/lng to albers
+                    position.xy = vec2(mix(position.xy, albers(lat, lon)*vec2(1000000.), .5));
+
+
+sources:
+    osm:
+        type: TopoJSONTiles
+        url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson
+layers:
+    water:
+        data: { source: osm }
+        draw:
+            albers:
+                order: 2
+                color: '#353535'
+    earth:
+        data: { source: osm }
+        draw:
+            albers:
+                order: 0
+                color: '#555'
+    landuse:
+        data: { source: osm }
+        draw:
+            albers:
+                order: 1
+                color: '#666'
+    roads:
+        data: { source: osm }
+        properties: { width: 3 }
+        draw:
+            lines:
+                order: 2
+                color: '#777'
+                width: 5
+    buildings:
+        data: { source: osm }
+        draw:
+            polygons:
+                order: 50
+                color: '#999'
+        extruded:
+            draw:
+                polygons:
+                    style: buildings
+                    extrude: function () { return feature.height > 0 || $zoom >= 16; }
+    road_labels:
+        data: { source: osm, layer: roads }
+        filter: { name: true, aeroway: false, tunnel: false, railway: false, not: { kind: rail } }
+
+        highway:
+            filter: { kind: highway, $zoom: { min: 7 } }
+            draw:
+                text:
+                    font:
+                        fill: white
+                        typeface: 500 12px Helvetica
+        not_highway:
+            filter: { not: { kind: highway }, $zoom: { min: 13 } }
+            draw:
+                text:
+                    font:
+                        fill: white
+                        typeface: 100 11px Helvetica
