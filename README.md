@@ -1,6 +1,6 @@
 # albers
 
-This map applies a dynamic [Albers equal-area conic projection](https://en.wikipedia.org/wiki/Albers_projection) to the Mapzen vector tiles, using the Tangram JavaScript mapping library.
+This map applies a dynamic [Albers equal-area conic projection](https://en.wikipedia.org/wiki/Albers_projection) to the Mapzen vector tiles, using the [Tangram](http://mapzen.com/tangram) mapping library.
 
 The Mapzen tiles are first converted from [Web Mercator](https://en.wikipedia.org/wiki/Web_Mercator) to spherical lat/lng coordinates, and then reprojected into Albers.
 
