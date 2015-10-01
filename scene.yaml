@@ -108,8 +108,4 @@ layers:
             albers:
                 order: 50
                 color: '#999'
-        extruded:
-            draw:
-                albers:
-                    style: buildings
-                    extrude: function () { return feature.height > 0 || $zoom >= 16; }
+                extrude: true
