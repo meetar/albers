@@ -8,6 +8,9 @@ lights:
         direction: [.1, .5, -1]
         diffuse: .7
         ambient: .5
+scene:
+    background:
+        color: '#3c3c3c'
 styles:
     albers:
         base: polygons
