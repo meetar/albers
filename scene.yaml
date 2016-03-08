@@ -77,38 +77,38 @@ layers:
         data: { source: osm }
         draw:
             alberslines:
-                order: 10
+                order: function() { return feature.sort_key; }
                 color: white
                 width: 2px
     water:
         data: { source: osm }
         draw:
             albers:
-                order: 2
+                order: function() { return feature.sort_key; }
                 color: '#353535'
     earth:
         data: { source: osm }
         draw:
             albers:
-                order: 0
+                order: function() { return feature.sort_key; }
                 color: '#555'
     landuse:
         data: { source: osm }
         draw:
             albers:
-                order: 1
+                order: function() { return feature.sort_key; }
                 color: '#666'
     roads:
         data: { source: osm }
         draw:
             alberslines:
-                order: 2
+                order: function() { return feature.sort_key; }
                 color: '#777'
                 width: 5
     buildings:
         data: { source: osm }
         draw:
             albers:
-                order: 50
+                order: function() { return feature.sort_key; }
                 color: '#999'
                 extrude: true
