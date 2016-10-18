@@ -70,45 +70,45 @@ styles:
         mix: albers
 sources:
     osm:
-        type: TopoJSONTiles
-        url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-_vxMzew
+        type: TopoJSON
+        url: //tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson?api_key=mapzen-QF1osLn?api_key=vector-tiles-_vxMzew
 layers:
     boundaries:
         data: { source: osm }
         draw:
             alberslines:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: white
                 width: 2px
     water:
         data: { source: osm }
         draw:
             albers:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: '#353535'
     earth:
         data: { source: osm }
         draw:
             albers:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: '#555'
     landuse:
         data: { source: osm }
         draw:
             albers:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: '#666'
     roads:
         data: { source: osm }
         draw:
             alberslines:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: '#777'
                 width: 5
     buildings:
         data: { source: osm }
         draw:
             albers:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: '#999'
                 extrude: true
