@@ -69,46 +69,46 @@ styles:
         base: lines
         mix: albers
 sources:
-    osm:
+    mapzen:
         type: TopoJSON
         url: https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
             api_key: mapzen-PvCT6iP
 layers:
     boundaries:
-        data: { source: osm }
+        data: { source: mapzen }
         draw:
             alberslines:
                 order: function() { return feature.sort_rank; }
                 color: white
                 width: 2px
     water:
-        data: { source: osm }
+        data: { source: mapzen }
         draw:
             albers:
                 order: function() { return feature.sort_rank; }
                 color: '#353535'
     earth:
-        data: { source: osm }
+        data: { source: mapzen }
         draw:
             albers:
                 order: function() { return feature.sort_rank; }
                 color: '#555'
     landuse:
-        data: { source: osm }
+        data: { source: mapzen }
         draw:
             albers:
                 order: function() { return feature.sort_rank; }
                 color: '#666'
     roads:
-        data: { source: osm }
+        data: { source: mapzen }
         draw:
             alberslines:
                 order: function() { return feature.sort_rank; }
                 color: '#777'
                 width: 5
     buildings:
-        data: { source: osm }
+        data: { source: mapzen }
         draw:
             albers:
                 order: function() { return feature.sort_rank; }
