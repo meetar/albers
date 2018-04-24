@@ -88,6 +88,6 @@ layers:
         data: { source: raster }
         draw:
             albersraster:
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 0; }
                 color: white
                 width: 2px

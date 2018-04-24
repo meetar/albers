@@ -77,38 +77,38 @@ layers:
         data: { source: mapzen }
         draw:
             alberslines:
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 0; }
                 color: white
                 width: 2px
     water:
         data: { source: mapzen }
         draw:
             albers:
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 0; }
                 color: '#353535'
     earth:
         data: { source: mapzen }
         draw:
             albers:
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 0; }
                 color: '#555'
     landuse:
         data: { source: mapzen }
         draw:
             albers:
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 0; }
                 color: '#666'
     roads:
         data: { source: mapzen }
         draw:
             alberslines:
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 0; }
                 color: '#777'
                 width: 5
     buildings:
         data: { source: mapzen }
         draw:
             albers:
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 0; }
                 color: '#999'
                 extrude: true
