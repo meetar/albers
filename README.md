@@ -10,5 +10,7 @@ I've left the edges of the loaded tiles visible so the map's behavior is more ob
 
 Live demo: http://meetar.github.io/albers/
 
+The code for this demo may be found in [scene.yaml](scene.yaml) – this file contains all the styling and projection code in a single scene. Another way to set this up would be to make styles which allow a projection to be imported separately – an example of this setup may be seen in the [base.yaml](base.yaml) and [albers.yaml](albers.yaml) files.
+
 ![usa](https://cloud.githubusercontent.com/assets/459970/10209464/83f25b72-67a9-11e5-95d6-ba116b966d04.jpg)
 
