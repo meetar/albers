@@ -1,0 +1,65 @@
+import: albers.yaml
+cameras:
+    perspective:
+        type: perspective
+        vanishing_point: [0, -500]
+lights:
+    directional1:
+        type: directional
+        direction: [.1, .5, -1]
+        diffuse: .7
+        ambient: .5
+scene:
+    background:
+        color: '#3c3c3c'
+styles:
+    data-polys:
+        base: polygons
+        mix: albers
+    data-lines:
+        base: lines
+        mix: albers
+sources:
+    mapzen:
+        type: TopoJSON
+        url: https://meetar.github.io/mapzen-tiles/vector/v1/256/all/{z}/{x}/{y}.topojson
+layers:
+    boundaries:
+        data: { source: mapzen }
+        draw:
+            data-lines:
+                order: function() { return feature.sort_rank || 0; }
+                color: white
+                width: 2px
+    water:
+        data: { source: mapzen }
+        draw:
+            data-polys:
+                order: function() { return feature.sort_rank || 0; }
+                color: '#353535'
+    earth:
+        data: { source: mapzen }
+        draw:
+            data-polys:
+                order: function() { return feature.sort_rank || 0; }
+                color: '#555'
+    landuse:
+        data: { source: mapzen }
+        draw:
+            data-polys:
+                order: function() { return feature.sort_rank || 0; }
+                color: '#666'
+    roads:
+        data: { source: mapzen }
+        draw:
+            data-lines:
+                order: function() { return feature.sort_rank || 0; }
+                color: '#777'
+                width: 5
+    buildings:
+        data: { source: mapzen }
+        draw:
+            data-polys:
+                order: function() { return feature.sort_rank || 0; }
+                color: '#999'
+                extrude: true
