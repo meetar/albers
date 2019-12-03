@@ -4,7 +4,11 @@ This map applies a dynamic [Albers equal-area conic projection](https://en.wikip
 
 The Mapzen tiles are first converted from [Web Mercator](https://en.wikipedia.org/wiki/Web_Mercator) to spherical lat/lng coordinates, and then reprojected into Albers.
 
-[Conic projections](https://en.wikipedia.org/wiki/Map_projection#Conic) are specified with a center and two "standard parallels", which are lines of latitude with no distortion – this map adjusts these parameters in real time with the movement of the map, using a vertex shader inside the scene.yaml file.
+[Conic projections](https://en.wikipedia.org/wiki/Map_projection#Conic) are specified with a center and two "standard parallels", which are lines of latitude with no distortion - it may be useful to think of these as the intersections of the conic projection with the "sphere" of the earth:
+
+![cone-sphere-intersectionl](https://user-images.githubusercontent.com/459970/70007000-c583a880-1523-11ea-9838-806ac04e3ab6.gif)
+
+This map's code adjusts these two standard parallel parameters in real time with the movement of the map, using a vertex shader inside the scene.yaml file.
 
 I've left the edges of the loaded tiles visible so the map's behavior is more obvious.
 
